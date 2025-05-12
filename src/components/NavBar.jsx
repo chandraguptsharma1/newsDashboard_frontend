@@ -3,10 +3,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../Auth/AuthContext";
 
 function NavBar() {
-  const { user, setUser } = useAuth();
+  const { user, setUser, loading } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = () => {
+    localStorage.removeItem("user");
     setUser(null);
     navigate("/login");
   };
@@ -18,7 +19,7 @@ function NavBar() {
       </div>
 
       <div className="space-x-4">
-        {!user && (
+        {loading ? null : !user ? (
           <>
             <Link to="/register" className="hover:underline">
               Register
@@ -27,11 +28,9 @@ function NavBar() {
               Login
             </Link>
           </>
-        )}
-
-        {user && (
+        ) : (
           <>
-            <Link to="/dashboard" className="hover:underline">
+            <Link to="/news" className="hover:underline">
               Dashboard
             </Link>
             <button onClick={handleLogout} className="hover:underline ml-4">
