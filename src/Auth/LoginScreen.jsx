@@ -69,6 +69,7 @@ export default function LoginScreen() {
           console.log("login response", res);
 
           const user = res.data.data.user;
+          localStorage.setItem("user", JSON.stringify(user));
           setUser(user);
           Swal.close();
 
@@ -77,7 +78,7 @@ export default function LoginScreen() {
             title: "Login Successful",
             text: `Welcome, ${form.email}`,
           }).then(() => {
-            navigate("/dashboard");
+            navigate("/news");
           });
         } catch (err) {
           Swal.close();
@@ -99,7 +100,7 @@ export default function LoginScreen() {
             title: "Offline Login",
             text: "Welcome back!",
           }).then(() => {
-            navigate("/dashboard");
+            navigate("/news");
           });
         } else {
           Swal.fire({

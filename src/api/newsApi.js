@@ -1,16 +1,25 @@
-// src/api/newsApi.js
-import mockData from "../mock/mockNews.json";
+import axiosInstance from "../utils/axiosInstance";
 
 export const fetchNews = async (query = "") => {
-  const articles = mockData.articles;
+  try {
+    const response = await axiosInstance.post("/news/get-article", {});
+    const articles = response.data?.data || [];
 
-  // Filter based on query string
-  const filtered = articles.filter((a) =>
-    `${a.title} ${a.description}`.toLowerCase().includes(query.toLowerCase())
-  );
+    // Only include articles that have BOTH title and description
+    const validArticles = articles.filter(
+      (article) => article?.title && article?.description
+    );
 
-  // Simulate delay
-  return new Promise((resolve) => {
-    setTimeout(() => resolve(filtered), 300);
-  });
+    // Frontend filtering using query string
+    const filtered = validArticles.filter((article) =>
+      `${article.title} ${article.description}`
+        .toLowerCase()
+        .includes(query.toLowerCase())
+    );
+
+    return filtered;
+  } catch (err) {
+    console.error("Error fetching the news from backend:", err);
+    return [];
+  }
 };
