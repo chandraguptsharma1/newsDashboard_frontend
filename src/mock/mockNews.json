@@ -1,0 +1,28 @@
+{
+  "articles": [
+    {
+      "title": "React 18 Released with Concurrent Features",
+      "description": "The React team announced the official release of React 18 with concurrent rendering features.",
+      "url": "https://reactjs.org/blog/2023/04/01/react-18.html",
+      "image": "https://reactjs.org/logo-og.png",
+      "publishedAt": "2023-04-01T10:00:00Z",
+      "source": { "name": "React Official" }
+    },
+    {
+      "title": "Vite Becomes the Preferred Build Tool",
+      "description": "Vite is gaining popularity due to its lightning-fast performance in frontend builds.",
+      "url": "https://vitejs.dev",
+      "image": "https://vitejs.dev/logo-with-shadow.png",
+      "publishedAt": "2023-04-02T12:30:00Z",
+      "source": { "name": "Vite Docs" }
+    },
+    {
+      "title": "Top 10 React Libraries for 2025",
+      "description": "Here are the most loved React libraries developers are using in 2025.",
+      "url": "https://dev.to/top-10-react-libs-2025",
+      "image": "",
+      "publishedAt": "2025-01-12T08:45:00Z",
+      "source": { "name": "Dev.to" }
+    }
+  ]
+}

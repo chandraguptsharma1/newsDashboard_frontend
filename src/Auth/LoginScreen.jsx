@@ -83,7 +83,7 @@ export default function LoginScreen() {
           text: `Welcome, ${form.email}!`,
           confirmButtonColor: "#3085d6",
         }).then(() => {
-          navigate("/dashboard");
+          navigate("/news");
         });
       } catch (err) {
         Swal.close(); // Close loading if error occurs

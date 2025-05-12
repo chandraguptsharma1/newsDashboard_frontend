@@ -1,30 +1,33 @@
 import React from "react";
 import {
   BrowserRouter as Router,
-  Route,
   Routes,
+  Route,
   Navigate,
 } from "react-router-dom";
+
 import LoginScreen from "./Auth/LoginScreen";
 import Registration from "./Auth/Registration";
 import PrivateRoute from "./Auth/PrivateRoute";
-import Dashboard from "./pages/Dashboard";
 import NavBar from "./components/NavBar";
+import NewsDashboard from "./pages/Dashboard"; // assuming this is your NewsDashboard
 
 function App() {
   return (
     <Router>
       <NavBar />
       <Routes>
+        {/* Public Routes */}
         <Route path="/" element={<Navigate to="/register" />} />
         <Route path="/login" element={<LoginScreen />} />
         <Route path="/register" element={<Registration />} />
 
+        {/* Protected Route */}
         <Route
-          path="/dashboard"
+          path="/news"
           element={
             <PrivateRoute>
-              <Dashboard />
+              <NewsDashboard />
             </PrivateRoute>
           }
         />
