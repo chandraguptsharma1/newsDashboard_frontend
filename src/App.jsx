@@ -11,6 +11,7 @@ import Registration from "./Auth/Registration";
 import PrivateRoute from "./Auth/PrivateRoute";
 import NavBar from "./components/NavBar";
 import NewsDashboard from "./pages/Dashboard"; // assuming this is your NewsDashboard
+import AddArticleorBlog from "./pages/AddArticleorBlog";
 
 function App() {
   return (
@@ -28,6 +29,16 @@ function App() {
           element={
             <PrivateRoute>
               <NewsDashboard />
+            </PrivateRoute>
+          }
+        />
+
+        {/* Protected Route */}
+        <Route
+          path="/add-article"
+          element={
+            <PrivateRoute>
+              <AddArticleorBlog />
             </PrivateRoute>
           }
         />

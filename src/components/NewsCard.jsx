@@ -1,7 +1,7 @@
 import React from "react";
 
 export default function NewsCard({ article }) {
-  const fallbackImage = "https://vitejs.dev/logo-with-shadow.png";
+  const fallbackImage = "https://static.wixstatic.com/media/a77aa0_8ed7124c70724a30b0b5e57174578017~mv2.png/v1/fill/w_924,h_635,al_c,q_90,enc_avif,quality_auto/a77aa0_8ed7124c70724a30b0b5e57174578017~mv2.png";
 
   return (
     <div className="bg-white shadow-md rounded-md overflow-hidden hover:shadow-lg transition flex flex-col h-full">
