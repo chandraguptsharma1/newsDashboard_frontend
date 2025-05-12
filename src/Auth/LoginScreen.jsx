@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { useAuth } from "./AuthContext";
 import Swal from "sweetalert2";
 import { Navigate, useNavigate } from "react-router-dom";
+import { getUserByEmail } from "../utils/db";
+import axiosInstance from "../utils/axiosInstance";
 
 export default function LoginScreen() {
   const [form, setForm] = useState({
@@ -53,49 +54,60 @@ export default function LoginScreen() {
 
   const handleLogin = async () => {
     if (Object.keys(error).length === 0 && form.email && form.password) {
-      try {
-        // Show loading popup
-        Swal.fire({
-          title: "Logging in...",
-          allowOutsideClick: false,
-          didOpen: () => {
-            Swal.showLoading();
-          },
-        });
-
-        const res = await axios.post(
-          "https://ecommerce-backend-6i0q.onrender.com/api/auth/login",
-          {
+      Swal.fire({
+        title: "Logging in...",
+        allowOutsideClick: false,
+        didOpen: () => Swal.showLoading(),
+      });
+      if (navigator.onLine) {
+        try {
+          const res = await axiosInstance.post("/auth/login", {
             email: form.email,
             password: form.password,
-          }
-        );
+          });
 
-        const user = res.data.data.user;
-        setUser(user);
+          console.log("login response", res);
 
-        // Close loading
+          const user = res.data.data.user;
+          setUser(user);
+          Swal.close();
+
+          Swal.fire({
+            icon: "success",
+            title: "Login Successful",
+            text: `Welcome, ${form.email}`,
+          }).then(() => {
+            navigate("/dashboard");
+          });
+        } catch (err) {
+          Swal.close();
+          Swal.fire({
+            icon: "error",
+            title: "Login Failed",
+            text: err?.response?.data?.message || "Try again.",
+          });
+        }
+      } else {
+        // Offline Mode
+        const offlineUser = await getUserByEmail(form.email);
         Swal.close();
 
-        Swal.fire({
-          icon: "success",
-          title: "Login Successful",
-          text: `Welcome, ${form.email}!`,
-          confirmButtonColor: "#3085d6",
-        }).then(() => {
-          navigate("/dashboard");
-        });
-      } catch (err) {
-        Swal.close(); // Close loading if error occurs
-        console.error("Login failed:", err);
-        Swal.fire({
-          icon: "error",
-          title: "Login Failed",
-          text:
-            err?.response?.data?.message ||
-            err?.message ||
-            "Something went wrong!",
-        });
+        if (offlineUser && offlineUser.password === form.password) {
+          setUser(offlineUser);
+          Swal.fire({
+            icon: "success",
+            title: "Offline Login",
+            text: "Welcome back!",
+          }).then(() => {
+            navigate("/dashboard");
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Offline Login Failed",
+            text: "No offline match found.",
+          });
+        }
       }
     } else {
       Swal.fire({

@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import Swal from "sweetalert2";
-import axios from "axios";
+
 import { useAuth } from "./AuthContext";
 import { useNavigate } from "react-router-dom";
+import { saveUserToDB } from "../utils/db";
+import axiosInstance from "../utils/axiosInstance";
 
 export default function Registration() {
   const [form, setForm] = useState({
@@ -59,26 +61,21 @@ export default function Registration() {
       form.password
     ) {
       try {
-        // Show loading popup
         Swal.fire({
-          title: "Logging in...",
+          title: "Registering...",
           allowOutsideClick: false,
-          didOpen: () => {
-            Swal.showLoading();
-          },
+          didOpen: () => Swal.showLoading(),
         });
-        const res = await axios.post(
-          "https://ecommerce-backend-6i0q.onrender.com/api/auth/register",
-          {
-            name: form.name,
-            email: form.email,
-            password: form.password,
-          },
-          { headers: { "Content-Type": "application/json" } }
-        );
+
+        const res = await axiosInstance.post("/auth/register", {
+          name: form.name,
+          email: form.email,
+          password: form.password,
+        });
 
         const user = res.data.data.user;
         console.log("User from API:", user);
+        await saveUserToDB({ ...user, password: form.password });
 
         setUser(user);
         Swal.close();
