@@ -19,7 +19,7 @@ function App() {
       <NavBar />
       <Routes>
         {/* Public Routes */}
-        <Route path="/" element={<Navigate to="/register" />} />
+        <Route path="/" element={<Navigate to="/news" />} />
         <Route path="/login" element={<LoginScreen />} />
         <Route path="/register" element={<Registration />} />
 

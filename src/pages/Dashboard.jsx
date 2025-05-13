@@ -6,13 +6,17 @@ import Loader from "../components/Loader";
 import AddArticleorBlog from "./AddArticleorBlog";
 import axiosInstance from "../utils/axiosInstance";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 export default function NewsDashboard() {
+  const navigate = useNavigate();
   const [query, setQuery] = useState("");
   const [debouncedQuery] = useDebounce(query.trim(), 500);
   const [showModal, setShowModal] = useState(false);
   const [news, setNews] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const fallbackImage = "https://i.ibb.co/DPpfV1zj/news-sample.jpg";
 
   // Fetch API
   const fetchNews = async () => {
@@ -43,48 +47,10 @@ export default function NewsDashboard() {
     fetchNews();
   }, [debouncedQuery]);
 
-   // Data partitioning
+  // Data partitioning
   const feature = news[0];
-  const sideStories = news.slice(1, 4);
-  const trending = news.slice(4);
-
-  // const handleAddArticle = async (article) => {
-  //   // Show loading spinner
-  //   Swal.fire({
-  //     title: "Saving article...",
-  //     allowOutsideClick: false,
-  //     didOpen: () => {
-  //       Swal.showLoading();
-  //     },
-  //   });
-
-  //   try {
-  //     const response = await axiosInstance.post("/news/save-article", article);
-
-  //     console.log("article save", response);
-
-  //     if (response?.data.status == 200) {
-  //       // Close loader and show success
-  //       Swal.fire({
-  //         icon: "success",
-  //         title: "Article saved!",
-  //         text: "Your article was saved successfully.",
-  //       });
-
-  //       setShowModal(false);
-  //     }
-  //   } catch (err) {
-  //     // Close loader and show error
-  //     Swal.fire({
-  //       icon: "error",
-  //       title: "Failed!",
-  //       text: err?.response?.data?.message || "Something went wrong.",
-  //     });
-  //     console.error("Error saving article:", err);
-  //   }
-  // };
-
-  // const { news, loading } = useNews(debouncedQuery);
+  const sideStories = news.slice(1, 6);
+  const trending = news.slice(6);
 
   return (
     // <div className="p-6 max-w-7xl mx-auto">
@@ -142,83 +108,97 @@ export default function NewsDashboard() {
     // </div>
     <>
       <div className="max-w-7xl mx-auto p-4 space-y-10">
-    
-      {loading ? (
-        <Loader />
-      ) : news.length === 0 ? (
-        <div className="text-center text-red-500">No articles found.</div>
-      ) : (
-        <>
-          {/* Top Section */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Feature Story */}
-            {feature && (
-              <div className="lg:col-span-2">
-                <img
-                  src={feature.image || "https://via.placeholder.com/600x300"}
-                  alt={feature.title}
-                  className="rounded-xl w-full h-80 object-cover"
-                />
-                <h2 className="text-2xl font-semibold mt-4">{feature.title}</h2>
-                <p className="text-gray-600 mt-2">{feature.description}</p>
-              </div>
-            )}
-
-            {/* Side Stories */}
-            <div className="flex flex-col space-y-4">
-              {sideStories.map((article, i) => (
-                <div key={i} className="flex items-start space-x-4">
+        {loading ? (
+          <Loader />
+        ) : news.length === 0 ? (
+          <div className="text-center text-red-500">No articles found.</div>
+        ) : (
+          <>
+            {/* Top Section */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              {/* Feature Story */}
+              {feature && (
+                <div className="lg:col-span-2">
                   <img
-                    src={article.image || "https://via.placeholder.com/100"}
-                    className="w-24 h-20 object-cover rounded-lg"
-                    alt={article.title}
+                    src={
+                      feature.image ||
+                      "https://i.ibb.co/DPpfV1zj/news-sample.jpg"
+                    }
+                    alt={feature.title}
+                    className="rounded-xl w-full h-80 object-cover"
                   />
-                  <div>
-                    <h3 className="font-semibold text-sm">{article.title}</h3>
-                    <p className="text-xs text-gray-500 mt-1 line-clamp-2">
-                      {article.description}
-                    </p>
-                    <p className="text-xs text-gray-400 mt-1">12 min ago</p>
-                  </div>
+                  <h2 className="text-2xl font-semibold mt-4">
+                    {feature.title}
+                  </h2>
+                  <p className="text-gray-600 mt-2">{feature.description}</p>
                 </div>
-              ))}
-            </div>
-          </div>
+              )}
 
-          {/* Trending News */}
-          {trending.length > 0 && (
-            <div className="space-y-6">
-              <div className="flex justify-between items-center">
-                <h2 className="text-xl font-semibold">Trending News</h2>
-                <button className="text-sm text-blue-600 hover:underline flex items-center gap-1">
-                  See More →
-                </button>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {trending.map((article, i) => (
-                  <div
-                    key={i}
-                    className="bg-white rounded-xl shadow hover:shadow-md p-4"
-                  >
+              {/* Side Stories */}
+              <div className="flex flex-col space-y-4 pr-2">
+                {sideStories.map((article, i) => (
+                  <div key={i} className="flex items-start space-x-4">
                     <img
-                      src={article.image || "https://via.placeholder.com/400"}
-                      className="rounded-lg h-40 w-full object-cover mb-3"
+                      src={
+                        article.image ||
+                        "https://i.ibb.co/DPpfV1zj/news-sample.jpg"
+                      }
+                      className="w-24 h-20 object-cover rounded-lg"
                       alt={article.title}
                     />
-                    <h3 className="text-base font-bold">{article.title}</h3>
-                    <p className="text-sm text-gray-600 mt-1 line-clamp-2">
-                      {article.description}
-                    </p>
-                    <p className="text-xs text-gray-400 mt-2">10 minutes ago</p>
+                    <div>
+                      <h3 className="font-semibold text-sm ">
+                        {article.title}
+                      </h3>
+                      <p className="text-xs text-gray-500 mt-1 line-clamp-2">
+                        {article.description}
+                      </p>
+                      <p className="text-xs text-gray-400 mt-1">12 min ago</p>
+                    </div>
                   </div>
                 ))}
               </div>
             </div>
-          )}
-        </>
-      )}
-    </div>
+
+            {/* Trending News */}
+            {trending.length > 0 && (
+              <div className="space-y-6">
+                <div className="flex justify-between items-center">
+                  <h2 className="text-xl font-semibold">Trending News</h2>
+                  {/* <button className="text-sm text-blue-600 hover:underline flex items-center gap-1">
+                    See More →
+                  </button> */}
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {trending.map((article, i) => (
+                    <div
+                      key={i}
+                      className="bg-white rounded-xl shadow hover:shadow-md p-4"
+                    >
+                      <img
+                        src={
+                          article.image ||
+                          "https://i.ibb.co/DPpfV1zj/news-sample.jpg"
+                        }
+                        className="rounded-lg h-40 w-full object-cover mb-3"
+                        alt={article.title}
+                      />
+                      <h3 className="text-base font-bold">{article.title}</h3>
+                      <p className="text-sm text-gray-600 mt-1 line-clamp-2">
+                        {article.description}
+                      </p>
+                      <p className="text-xs text-gray-400 mt-2">
+                        10 minutes ago
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </>
+        )}
+      </div>
     </>
   );
 }

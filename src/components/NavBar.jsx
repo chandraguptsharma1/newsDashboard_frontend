@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   FiMenu,
   FiSearch,
@@ -12,12 +12,35 @@ import { useNavigate } from "react-router-dom";
 // import { useAuth } from "../Auth/AuthContext";
 
 function NavBar() {
-   const navigate = useNavigate();
-   const handleClick = () => {
+  const [isLoggedIn, setisLoggedIn] = useState(false);
+  const navigate = useNavigate();
+  const handleClick = () => {
     navigate("/add-article");
   };
 
-  
+  const handleLogo = () => {
+    navigate("/");
+  };
+
+  useEffect(() => {
+    if (token) {
+      console.log("token===>", token);
+      setisLoggedIn(true);
+    } else {
+      setisLoggedIn(false);
+    }
+  }, []);
+
+  const handleSignin = () => {
+    navigate("/login");
+  };
+
+  const handleSignup = () => {
+    navigate("/register");
+  };
+
+  const token = localStorage.getItem("token");
+
   // const { user, setUser, loading } = useAuth();
   // const navigate = useNavigate();
 
@@ -27,7 +50,6 @@ function NavBar() {
   //   navigate("/login");
   // };
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [isLoggedIn] = useState(false);
 
   return (
     <>
@@ -55,7 +77,10 @@ function NavBar() {
         </div>
 
         {/* CENTER: Title */}
-        <div className="absolute left-1/2 transform -translate-x-1/2 text-lg font-bold">
+        <div
+          onClick={handleLogo}
+          className="absolute left-1/2 transform -translate-x-1/2 text-lg font-bold"
+        >
           Bloomberg
         </div>
 
@@ -63,7 +88,10 @@ function NavBar() {
         <div className="hidden md:flex items-center space-x-2">
           {isLoggedIn ? (
             <>
-              <button onClick={handleClick} className="flex items-center gap-2 px-4 py-1 text-sm bg-gray-700 text-white rounded hover:bg-gray-800 transition">
+              <button
+                onClick={handleClick}
+                className="flex items-center gap-2 px-4 py-1 text-sm bg-gray-700 text-white rounded hover:bg-gray-800 transition"
+              >
                 <FiPlusCircle /> News/Blog
               </button>
               <div className="w-8 h-8 rounded-full bg-gray-100 border flex items-center justify-center text-black hover:shadow-md transition">
@@ -72,10 +100,16 @@ function NavBar() {
             </>
           ) : (
             <>
-              <button className="flex items-center gap-2 px-4 py-1 text-sm border border-black rounded hover:bg-gray-100 transition">
+              <button
+                onClick={handleSignin}
+                className="flex items-center gap-2 px-4 py-1 text-sm border border-black rounded hover:bg-gray-100 transition"
+              >
                 <FiLogIn /> Sign In
               </button>
-              <button className="flex items-center gap-2 px-4 py-1 text-sm bg-black text-white rounded hover:opacity-90 transition">
+              <button
+                onClick={handleSignup}
+                className="flex items-center gap-2 px-4 py-1 text-sm bg-black text-white rounded hover:opacity-90 transition"
+              >
                 <FiUserPlus /> Sign Up
               </button>
             </>
@@ -100,7 +134,10 @@ function NavBar() {
         <div className="flex flex-col space-y-4 px-6 mt-10">
           {isLoggedIn ? (
             <>
-              <button onClick={handleClick} className="flex items-center gap-2 px-4 py-2 text-sm bg-gray-700 text-white rounded hover:bg-gray-800 text-left transition">
+              <button
+                onClick={handleClick}
+                className="flex items-center gap-2 px-4 py-2 text-sm bg-gray-700 text-white rounded hover:bg-gray-800 text-left transition"
+              >
                 <FiPlusCircle /> News/Blog
               </button>
               <div className="flex items-center gap-3 px-4 py-2 rounded-md bg-gray-100 hover:bg-gray-200 text-sm font-medium text-gray-800">
@@ -110,10 +147,16 @@ function NavBar() {
             </>
           ) : (
             <>
-              <button className="flex items-center gap-2 px-4 py-2 text-sm border border-black rounded hover:bg-gray-100 text-left transition">
+              <button
+                onClick={handleSignin}
+                className="flex items-center gap-2 px-4 py-2 text-sm border border-black rounded hover:bg-gray-100 text-left transition"
+              >
                 <FiLogIn /> Sign In
               </button>
-              <button className="flex items-center gap-2 px-4 py-2 text-sm bg-black text-white rounded hover:opacity-90 text-left transition">
+              <button
+                onClick={handleSignup}
+                className="flex items-center gap-2 px-4 py-2 text-sm bg-black text-white rounded hover:opacity-90 text-left transition"
+              >
                 <FiUserPlus /> Sign Up
               </button>
             </>

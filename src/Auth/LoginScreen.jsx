@@ -68,18 +68,22 @@ export default function LoginScreen() {
 
           console.log("login response", res);
 
-          const user = res.data.data.user;
-          localStorage.setItem("user", JSON.stringify(user));
-          setUser(user);
-          Swal.close();
+          if (res.status == 200) {
+            const { user, token } = res.data.data;
+            localStorage.setItem("user", JSON.stringify(user));
+            localStorage.setItem("token", token);
 
-          Swal.fire({
-            icon: "success",
-            title: "Login Successful",
-            text: `Welcome, ${form.email}`,
-          }).then(() => {
-            navigate("/news");
-          });
+            setUser(user);
+            Swal.close();
+
+            Swal.fire({
+              icon: "success",
+              title: "Login Successful",
+              text: `Welcome, ${form.email}`,
+            }).then(() => {
+              navigate("/news");
+            });
+          }
         } catch (err) {
           Swal.close();
           Swal.fire({

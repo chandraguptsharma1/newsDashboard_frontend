@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import Swal from "sweetalert2";
+import axiosInstance from "../utils/axiosInstance";
 
-export default function AddArticleorBlog({ onSubmit }) {
+export default function AddArticleorBlog() {
   const [form, setForm] = useState({
     title: "",
     description: "",
@@ -30,13 +32,50 @@ export default function AddArticleorBlog({ onSubmit }) {
       source: { name: form.sourceName },
     };
 
-    onSubmit(formatted); // Send the article object to parent or API
+    handleAddArticle(formatted); // Send the article object to parent or API
+  };
+
+  const handleAddArticle = async (article) => {
+    // Show loading spinner
+    Swal.fire({
+      title: "Saving article...",
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+
+    try {
+      const response = await axiosInstance.post("/news/save-article", article);
+
+      console.log("article save", response);
+
+      if (response?.data.status == 200) {
+        // Close loader and show success
+        Swal.fire({
+          icon: "success",
+          title: "Article saved!",
+          text: "Your article was saved successfully.",
+        });
+      }
+    } catch (err) {
+      // Close loader and show error
+      Swal.fire({
+        icon: "error",
+        title: "Failed!",
+        text: err?.response?.data?.message || "Something went wrong.",
+      });
+      console.error("Error saving article:", err);
+    }
   };
 
   return (
-    <div style={{
-    backgroundImage: "url('https://i.ibb.co/kg3j87KW/backgroundimage.jpg')",
-  }} className="p-5 min-h-screen flex justify-center items-center bg-no-repeat bg-cover bg-center">
+    <div
+      style={{
+        backgroundImage: "url('https://i.ibb.co/kg3j87KW/backgroundimage.jpg')",
+      }}
+      className="p-5 min-h-screen flex justify-center items-center bg-no-repeat bg-cover bg-center"
+    >
       <div className="py-8 px-6 max-w-xl w-full bg-white bg-opacity-30 rounded-lg shadow-lg backdrop-blur-xl backdrop-filter">
         <h2 className="text-3xl font-extrabold text-center text-gray-800 mb-5">
           Add New Article
@@ -52,7 +91,7 @@ export default function AddArticleorBlog({ onSubmit }) {
               value={form.title}
               onChange={handleChange}
               required
-              className="bg-transparent border rounded-lg shadow border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 py-2 px-4 block w-full"
+              className="bg-transparent border rounded-lg shadow border-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 py-2 px-4 block w-full"
             />
           </div>
 
@@ -66,7 +105,7 @@ export default function AddArticleorBlog({ onSubmit }) {
               onChange={handleChange}
               rows="3"
               required
-              className="bg-transparent border rounded-lg shadow border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 py-2 px-4 block w-full"
+              className="bg-transparent border rounded-lg shadow border-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 py-2 px-4 block w-full"
             ></textarea>
           </div>
 
@@ -80,7 +119,7 @@ export default function AddArticleorBlog({ onSubmit }) {
               value={form.url}
               onChange={handleChange}
               required
-              className="bg-transparent border rounded-lg shadow border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 py-2 px-4 block w-full"
+              className="bg-transparent border rounded-lg shadow border-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 py-2 px-4 block w-full"
             />
           </div>
 
@@ -93,7 +132,7 @@ export default function AddArticleorBlog({ onSubmit }) {
               name="image"
               value={form.image}
               onChange={handleChange}
-              className="bg-transparent border rounded-lg shadow border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 py-2 px-4 block w-full"
+              className="bg-transparent border rounded-lg shadow border-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 py-2 px-4 block w-full"
             />
           </div>
 
@@ -107,7 +146,7 @@ export default function AddArticleorBlog({ onSubmit }) {
               value={form.publishedAt}
               onChange={handleChange}
               required
-              className="bg-transparent border rounded-lg shadow border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 py-2 px-4 block w-full"
+              className="bg-transparent border rounded-lg shadow border-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 py-2 px-4 block w-full"
             />
           </div>
 
@@ -121,7 +160,7 @@ export default function AddArticleorBlog({ onSubmit }) {
               value={form.sourceName}
               onChange={handleChange}
               required
-              className="bg-transparent border rounded-lg shadow border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 py-2 px-4 block w-full"
+              className="bg-transparent border rounded-lg shadow border-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 py-2 px-4 block w-full"
             />
           </div>
 
